@@ -1,0 +1,2 @@
+# training
+Training Shopify Basics
