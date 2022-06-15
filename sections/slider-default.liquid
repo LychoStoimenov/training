@@ -1,0 +1,61 @@
+{{ 'slider-default.css' | asset_url | stylesheet_tag }}
+
+{% assign _blocks = section.blocks %}
+
+{% if _blocks.size > 0 %}
+  <div class="slider-default">
+    <div class="page-width">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {% for block in _blocks %}
+            {% assign _block = block.settings %}
+
+            <div class="swiper-slide">
+              <div class="slider__image">
+                <div
+                class="slider__image-inner"
+                aria-label="{{- _block.image.alt | escape -}}"
+                role="img"
+                style="background-image: url({{- _block.image | img_url: '1700x' -}});"
+                >
+                </div><!-- /.slider__image-inner -->
+              </div>
+              <!-- /.slider__image -->
+            </div><!-- /.swiper-slide -->
+          {% endfor %}
+        </div><!-- /.swiper-wrapper -->
+      </div><!-- /.swiper-container -->
+
+      <div class="swiper-pagination"></div>
+      <!-- /.swiper-pagination -->
+    </div>
+    <!-- /.page-width -->
+  </div>
+  <!-- /.slider-default -->
+{% endif %}
+
+{% schema %}
+{
+  "name": "Slider Default",
+  "class": "SAMPLE-CLASS",
+  "blocks": [
+    {
+      "type": "slider",
+      "name": "Slider Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider Default",
+      "category": "Sections"
+    }
+  ]
+}
+{% endschema %}

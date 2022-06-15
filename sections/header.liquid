@@ -74,6 +74,7 @@
 </svg>
 <{% if section.settings.enable_sticky_header %}sticky-header{% else %}div{% endif %} class="header-wrapper{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
   <header class="header header--{{ section.settings.logo_position }} page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}">
+    {% comment %}
     {%- if section.settings.menu != blank -%}
       <header-drawer>
         <details class="menu-drawer-container">
@@ -235,6 +236,7 @@
         </details>
       </header-drawer>
     {%- endif -%}
+    {% endcomment %}
 
     {%- if section.settings.logo_position == 'top-center' or section.settings.menu == blank -%}
       <details-modal class="header__search">
@@ -296,6 +298,7 @@
       </h1>
     {%- endif -%}
 
+    {% comment %}
     {%- if section.settings.menu != blank -%}
       <nav class="header__inline-menu">
         <ul class="list-menu list-menu--inline" role="list">
@@ -347,6 +350,12 @@
         </ul>
       </nav>
     {%- endif -%}
+    {% endcomment %}
+
+    <div class="header__nav">
+      {% render 'nav' _links: linklists[section.settings.menu].links %}
+    </div>
+    <!-- /.header__nav -->
 
     <div class="header__icons">
       <details-modal class="header__search">

@@ -297,6 +297,13 @@
             </pickup-availability>
 
             <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+          {% when 'message' %}
+            {% if block.settings.message != blank %}
+              <div class="product-simple-message">
+                {{- block.settings.message -}}
+              </div>
+              <!-- /.product-simple-message -->
+            {% endif %}
           {%- endcase -%}
         {%- endfor -%}
       </div>
@@ -547,6 +554,18 @@
       "type": "description",
       "name": "t:sections.main-product.blocks.description.name",
       "limit": 1
+    },
+    {
+      "type": "message",
+      "name": "Message",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "message",
+          "label": "Message"
+        }
+      ]
     },
     {
       "type": "share",

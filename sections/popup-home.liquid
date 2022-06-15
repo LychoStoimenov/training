@@ -1,0 +1,62 @@
+{% assign _section = section.settings %}
+
+<div class="popup js-popup js-popup-home">
+  <div class="popup__inner">
+    <button class="popup__close js-popup-close">
+      X
+    </button>
+
+    <div class="popup__content">
+      <h2 class="popup__title">
+        {{- _section.title -}}
+      </h2>
+      <!-- /.popup__title -->
+
+      <div class="popup__entry">
+        {{- _section.content -}}
+      </div>
+      <!-- /.popup__entry -->
+
+      <div class="popup__actions">
+        <a href="{{- _section.btn_url -}}" class="button">
+          {{- _section.btn_text -}}
+        </a>
+      </div>
+      <!-- /.popup__actions -->
+    </div>
+    <!-- /.popup__content -->
+  </div>
+  <!-- /.popup__inner -->
+
+  <div class="popup__background js-popup-close"></div>
+  <!-- /.popup__background -->
+</div>
+<!-- /.popup -->
+
+{% schema %}
+{
+  "name": "Popup Simple",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Text Content"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text"
+    }
+  ]
+}
+{% endschema %}

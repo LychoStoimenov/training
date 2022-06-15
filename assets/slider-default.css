@@ -1,0 +1,12 @@
+.slider-default {
+  padding: 40px 0;
+}
+
+.slider-default .slider__image-inner {
+  display: block;
+  width: 100%;
+  padding-top: 64.25%;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

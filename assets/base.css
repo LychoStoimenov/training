@@ -356,7 +356,7 @@ h5,
   font-style: var(--font-heading-style);
   font-weight: normal;
   letter-spacing: 0.06rem;
-  color: var(--color-foreground);
+  color: darkgray;
   line-height: 1.3;
 }
 
@@ -372,37 +372,37 @@ h5,
 
 h1,
 .h1 {
-  font-size: 3rem;
+  font-size: 4rem;
 }
 
 @media only screen and (min-width: 750px) {
   h1,
   .h1 {
-    font-size: 4rem;
+    font-size: 5rem;
   }
 }
 
 h2,
 .h2 {
-  font-size: 2rem;
+  font-size: 3rem;
 }
 
 @media only screen and (min-width: 750px) {
   h2,
   .h2 {
-    font-size: 2.4rem;
+    font-size: 3.4rem;
   }
 }
 
 h3,
 .h3 {
-  font-size: 1.7rem;
+  font-size: 2.7rem;
 }
 
 @media only screen and (min-width: 750px) {
   h3,
   .h3 {
-    font-size: 1.8rem;
+    font-size: 2.8rem;
   }
 }
 
@@ -410,18 +410,18 @@ h4,
 .h4 {
   font-family: var(--font-heading-family);
   font-style: var(--font-heading-style);
-  font-size: 1.5rem;
+  font-size: 2.5rem;
 }
 
 h5,
 .h5 {
-  font-size: 1.2rem;
+  font-size: 2.2rem;
 }
 
 @media only screen and (min-width: 750px) {
   h5,
   .h5 {
-    font-size: 1.3rem;
+    font-size: 2.3rem;
   }
 }
 
@@ -446,7 +446,7 @@ blockquote {
 }
 
 .caption {
-  font-size: 1rem;
+  font-size: 2rem;
   letter-spacing: 0.07rem;
   line-height: 1.7;
 }
@@ -1125,12 +1125,13 @@ deferred-media {
   padding: 0.9rem 3rem 1.1rem;
   text-decoration: none;
   border: 0;
-  border-radius: 0;
+  border-radius: 10px;
   background-color: var(--color-button-background);
   box-shadow: 0 0 0 0.1rem var(--color-button-border);
   color: var(--color-button-text);
   min-width: 12rem;
   min-height: 4.5rem;
+  opacity: .9;
   transition: box-shadow var(--duration-short) ease;
   -webkit-appearance: none;
   appearance: none;
