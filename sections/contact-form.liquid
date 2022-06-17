@@ -71,6 +71,56 @@
   {%- endform -%}
 </div>
 
+
+<div style="text-align: center; padding: 50px;">
+  <p>Enter Product ID here</p>
+  <input type="text" class="js-product-id">
+</div>
+
+<div style="text-align: center;">
+  <p>Choose Quantity</p>
+  <div class="qty js-test-qty">
+    <button class="qty__minus qty__btn" data-action="minus">
+      -
+    </button>
+
+    <input type="number" name="qty" id="qty" class="qty__field js-qty-field" value="1" min="0" style="text-align: center;">
+
+    <button class="qty__plus qty__btn" data-action="plus">
+      +
+    </button>
+  </div>
+  <!-- /.qty -->
+</div>
+
+<div style="text-align: center; padding: 100px;">
+  <button class="js-btn-add" style="font-size: 20px; padding: 15px; background: red; cursor: pointer;">
+    Add
+  </button>
+
+  <button class="js-btn-remove" style="font-size: 20px; padding: 15px; background: red; cursor: pointer;">
+    Remove
+  </button>
+</div>
+
+<div style="text-align: center; padding: 50px;">
+  <p>Form Product</p>
+  <form action="" class="js-form-product">
+    <p>Add handle of the product</p>
+    <input type="text">
+
+    <button type="submit">
+      Submit
+    </button>
+  </form>
+  <!-- /.js-form-product -->
+
+  <div class="js-product-show">
+
+  </div>
+  <!-- /.js-product-show -->
+</div>
+
 {% schema %}
 {
   "name": "t:sections.contact-form.name",

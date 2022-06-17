@@ -65,7 +65,7 @@
       "settings": {}
     },
     "product-recommendations": {
-      "type": "product-recommendations",
+      "type": "section-recommendations",
       "settings": {}
     }
   },
