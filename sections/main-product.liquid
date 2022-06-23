@@ -253,7 +253,20 @@
             </noscript>
           {%- when 'buy_buttons' -%}
             <product-form class="product-form">
-              {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              {%- form 'product', product, id: product_form_id, class: 'form' -%}
+              {% if customer and product.price >= 5000 and product.metafields.custom.product_gift_message %}
+                <div class="gift-area" style="margin-bottom: 30px;">
+                  <label for="text_message">Additional Message</label>
+                  <textarea style="width: 100%; min-height: 150px;" id="text_message" name="properties[Engraving]"></textarea>
+                  <p>Send message via</p>
+                  <label for="via-Email">Email</label>
+                  <input type="radio" name="properties[VIA]" id="via-Email" value="Email">
+                  <label for="via-Printed">Printed</label>
+                  <input type="radio" name="properties[VIA]" id="via-Printed" value="Printed">
+                </div>
+                <!-- /.gift-area -->
+              {% endif %}
+
                 <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
                 <div class="product-form__buttons">
                   <button
@@ -309,7 +322,10 @@
       </div>
     </div>
   </div>
+  {% comment %}
+
   {%- render 'cart-notification' -%}
+  {% endcomment %}
 
   <product-modal id="ProductModal-{{ section.id }}" class="product-media-modal">
     <div role="dialog" aria-label="{{ 'products.modal.label' | t }}" aria-modal="true" tabindex="-1">

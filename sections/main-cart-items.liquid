@@ -54,6 +54,10 @@
 
                     <a href="{{ item.product.url }}" class="cart-item__name break">{{ item.product.title | escape }}</a>
 
+                    <script>
+                      console.log( {{ item | json }} );
+                    </script>
+
                     {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != nil -%}
                       <dl>
                         {%- if item.product.has_only_default_variant == false -%}
