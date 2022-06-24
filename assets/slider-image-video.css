@@ -1,0 +1,27 @@
+.slider-image-video {
+  position: relative;
+  padding: 40px 0;
+}
+
+.slider-image-video .slider__image {
+  position: relative;
+  padding-top: 52.7%;
+}
+
+.slider-image-video .slider__image img,
+.slider-image-video .slider__image video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-image-video .slider__btn {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

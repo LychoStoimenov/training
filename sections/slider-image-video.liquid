@@ -1,0 +1,118 @@
+{{ 'slider-image-video.css' | asset_url | stylesheet_tag }}
+
+{% assign _blocks = section.blocks %}
+
+{% if _blocks.size > 0 %}
+  <div class="slider-image-video">
+    <div class="page-width">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {% for block in _blocks %}
+            {% assign _block = block.settings %}
+            {% assign _type = block.type %}
+
+            {% if _type == 'image' %}
+              {% if _block.image != blank %}
+                <div class="swiper-slide">
+                  {% if _block.image_text != blank and _block.image_url != blank %}
+                    <div class="slider__text">
+                      <p>
+                        <a href="{{- _block.image_url -}}">
+                          {{- _block.image_text -}}
+                        </a>
+                      </p>
+                    </div>
+                    <!-- /.slider__text -->
+                  {% endif %}
+
+                  <div class="slider__image">
+                    <img src="{{- _block.image | image_url: width: 2000 -}}" alt="{{- _block.image.alt | escape -}}">
+                  </div>
+                  <!-- /.slider__image -->
+                </div><!-- /.swiper-slide -->
+              {% endif %}
+            {% endif %}
+
+            {% if _type == 'video' %}
+              {% if _block.video_url != blank %}
+                <div class="swiper-slide">
+                  <div class="slider__image">
+                    <video src="{{- _block.video_url -}}" autoplay muted playsinline loop></video>
+
+                    {% if _block.btn_text != blank and _block.btn_url != blank %}
+                      <a href="{{- _block.btn_url -}}" class="slider__btn button">
+                        {{- _block.btn_text -}}
+                      </a>
+                    {% endif %}
+                  </div>
+                  <!-- /.slider__image -->
+                </div><!-- /.swiper-slide -->
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div><!-- /.swiper-wrapper -->
+      </div><!-- /.swiper-container -->
+
+      <div class="swiper-pagination"></div>
+      <!-- /.swiper-pagination -->
+    </div>
+    <!-- /.page-width -->
+  </div>
+  <!-- /.slider-image-video -->
+{% endif %}
+
+{% schema %}
+{
+  "name": "Slider Image / Video",
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "textarea",
+          "id": "image_text",
+          "label": "Image Text"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Text Image URL"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL"
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "btn_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider Image / Video",
+      "category": "Sections"
+    }
+  ]
+}
+{% endschema %}
