@@ -34,7 +34,7 @@
 
             <tbody>
               {%- for item in cart.items -%}
-                <tr class="cart-item" id="CartItem-{{ item.index | plus: 1 }}">
+                <tr class="cart-item" id="CartItem-{{ item.index | plus: 1 }}" data-id="{{item.id}}" data-engraving="{{item.properties.Engraving}}" data-visibility="{{item.properties.Visibility}}">
                   <td class="cart-item__media">
                     {% if item.image %}
                       <img class="cart-item__image"
@@ -54,9 +54,6 @@
 
                     <a href="{{ item.product.url }}" class="cart-item__name break">{{ item.product.title | escape }}</a>
 
-                    <script>
-                      console.log( {{ item | json }} );
-                    </script>
 
                     {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != nil -%}
                       <dl>
@@ -201,6 +198,10 @@
                         </span>
                       {%- endif -%}
                     </div>
+
+                    <p class="js-test">
+                      REMOVE ITEMS
+                    </p>
 
                     <cart-remove-button id="Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
                       <a href="{{ item.url_to_remove }}" class="button button--tertiary" aria-label="{{ 'sections.cart.remove_title' | t: title: item.title }}">

@@ -1,0 +1,25 @@
+.shell {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.product-alt {
+
+}
+
+.product-alt .product__inner {
+  display: flex;
+  margin: 0 -20px;
+}
+
+.product-alt .product__images,
+.product-alt .product__content {
+  width: 50%;
+  padding: 0 20px;
+}
+

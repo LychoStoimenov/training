@@ -157,3 +157,98 @@ if (document.querySelector('.js-btn-add') != null) {
     getProduct(myHandle);
   });
 }
+
+const productEngraving = document.querySelector('.product-alt');
+
+if (productEngraving != null) {
+  let newConfig = {};
+  let newItems = [];
+  let props = {};
+
+  const pdId = productEngraving.querySelector('.js-product-id').value;
+  const pdQty = productEngraving.querySelector('.js-product-quantity').value;
+  const engId = productEngraving.querySelector('.js-product-engraving-id').value;
+
+  const testId = 40543276957853;
+  const testQty = 1;
+
+  document.querySelector('.js-add-test').addEventListener('click', function () {
+    const engQty = productEngraving.querySelector('.js-engraving-message').value.replaceAll(' ', '').length;
+
+    props = {};
+
+    props[`Engraving`] = productEngraving.querySelector('.js-engraving-message').value;
+
+    newItems.push({
+      id: pdId,
+      quantity: pdQty,
+      properties: props,
+    });
+
+    newItems.push({
+      id: engId,
+      quantity: engQty,
+      properties: {
+        Engraving: productEngraving.querySelector('.js-engraving-message').value,
+        Visibility: 'hidden',
+      },
+    });
+
+    newConfig = {
+      items: newItems,
+    };
+
+    fetch('/cart/add.js', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(newConfig),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.description) {
+          console.log(data.description);
+        } else {
+          console.log(data);
+        }
+      });
+  });
+}
+
+document.querySelectorAll('.js-test').forEach((btn) => {
+  btn.addEventListener('click', function () {
+    const item = this.closest('tr');
+    const itemEngravingText = item.dataset.engraving;
+
+    const itemsToRemove = document.querySelectorAll(`[data-engraving="${itemEngravingText}"]`);
+
+    let updates = {};
+
+    itemsToRemove.forEach((itemToRemove) => {
+      const idToRemove = itemToRemove.dataset.id;
+
+      console.log(idToRemove);
+
+      updates[idToRemove] = 0;
+
+      setTimeout(function () {
+        fetch(`/cart/update.js`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({ updates }),
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+          });
+      }, 500);
+    });
+  });
+});
