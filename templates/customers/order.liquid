@@ -1,5 +1,9 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 
+<script>
+  console.log( {{ order.name | json }} );
+</script>
+
 <div class="customer order">
   <svg style="display:none">
     <symbol id="icon-discount" viewBox="0 0 12 12">
@@ -11,6 +15,10 @@
     <a href="{{ routes.account_url }}">{{ 'customer.account.return' | t }}</a>
   </div>
 
+
+  <script>
+    console.log( {{ order.id | json }} );
+  </script>
   <div>
     <div>
       <h2>{{ 'customer.order.title' | t: name: order.name }}</h2>

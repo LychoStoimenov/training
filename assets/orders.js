@@ -80,6 +80,7 @@ if (getCookie('accessTokenEmail') && getCookie('accessTokenPass')) {
       .then((data) => {
         const myToken = data.data.customerAccessTokenCreate.customerAccessToken.accessToken;
 
+        // SHOW UNFULFILLED ORDERS - START
         fetch(`//${window.location.host}/api/2022-04/graphql.json`, {
           method: 'POST',
           headers: {
@@ -87,17 +88,17 @@ if (getCookie('accessTokenEmail') && getCookie('accessTokenPass')) {
             'Content-Type': 'application/graphql',
           },
           body: `query {
-              customer(customerAccessToken: "${myToken}") {
-                id,
-                orders(first: 50) {
-                  edges {
-                    node {
-                      fulfillmentStatus
-                    }
+            customer(customerAccessToken: "${myToken}") {
+              id,
+              orders(first: 50) {
+                edges {
+                  node {
+                    fulfillmentStatus
                   }
                 }
               }
-            }`,
+            }
+          }`,
         })
           .then((res) => {
             return res.json();
@@ -125,6 +126,177 @@ if (getCookie('accessTokenEmail') && getCookie('accessTokenPass')) {
               }
             }
           });
+        // SHOW UNFULFILLED ORDERS - END
+
+        if (document.querySelector('.section-order-status') != null) {
+          document.querySelector('.js-find-order').addEventListener('click', function () {
+            document.querySelector('.section-order-status tbody').innerHTML = '';
+
+            const orderID = document.querySelector('.js-order-id').value;
+
+            fetch(`//${window.location.host}/api/2022-04/graphql.json`, {
+              method: 'POST',
+              headers: {
+                'X-Shopify-Storefront-Access-Token': 'be68f875893107e3d878cf57a0a7abdd',
+                'Content-Type': 'application/graphql',
+              },
+              body: `query {
+                customer(customerAccessToken: "${myToken}") {
+                  id,
+                  firstName,
+                  lastName,
+                  orders(first: 50, query:"id:${orderID}") {
+                    edges {
+                      node {
+                        id,
+                        orderNumber,
+                        fulfillmentStatus,
+                        currentSubtotalPrice {
+                          amount,
+                          currencyCode
+                        },
+                        originalTotalPrice {
+                          amount,
+                          currencyCode
+                        },
+                        shippingAddress {
+                          address1,
+                          address2,
+                          city,
+                          country,
+                          name,
+                          zip
+                        },
+                        lineItems(first: 5) {
+                          edges {
+                            node {
+                              title,
+                              quantity,
+                              variant {
+                                sku,
+                                priceV2 {
+                                  amount,
+                                  currencyCode
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }`,
+            })
+              .then((res) => {
+                return res.json();
+              })
+              .then((dat) => {
+                const customer = dat.data.customer;
+                const ordersLength = customer.orders.edges.length;
+
+                if (ordersLength > 0) {
+                  document.querySelector('.section-order-status').classList.add('has-order');
+                  document.querySelector('.section-order-status').classList.remove('has-no-order');
+                  const order = customer.orders.edges[0].node;
+
+                  const infoHtml = `
+                    <div class="box-info">
+                      <h3>Cusotmer:</h3>
+                      <p>
+                        First Name: ${customer.firstName}
+                      </p>
+                      <p>
+                        Last Name: ${customer.lastName}
+                      </p>
+                      <p>
+                        Customer ID: ${customer.id.split('Customer/')[1]}
+                      </p>
+                    </div>
+                    <div class="box-info">
+                      <h3>Order:</h3>
+                      <p>
+                        Order Number: #${order.orderNumber}
+                      </p>
+                      <p>
+                        Order ID: ${order.id.split('Order/')[1].split('?')[0]}
+                      </p>
+                      <p>
+                        STATUS: ${order.fulfillmentStatus}
+                      </p>
+                    </div>
+                  `;
+
+                  const billingHtml = `
+                    <div class="box-info">
+                      <h3>Billing</h3>
+
+                      <p>
+                        Full name: ${order.shippingAddress.name}
+                      </p>
+                      <p>
+                        Country: ${order.shippingAddress.country}
+                      </p>
+                      <p>
+                        City ${order.shippingAddress.city}
+                      </p>
+                      <p>
+                        Address: ${order.shippingAddress.address1}
+                      </p>
+                      <p>
+                        Zip: ${order.shippingAddress.zip}
+                      </p>
+                    </div>
+                  `;
+
+                  const lineItems = order.lineItems.edges;
+
+                  document.querySelector('.section__customer-info').innerHTML = infoHtml;
+                  document.querySelector('.section__customer-billing').innerHTML = billingHtml;
+
+                  lineItems.forEach((lineItem) => {
+                    const item = lineItem.node;
+
+                    const itemHtml = `
+                      <td>
+                        ${item.quantity}
+                      </td>
+                      <td>
+                        ${item.title}
+                      </td>
+                      <td>
+                        ${item.variant.sku}
+                      </td>
+                      <td>
+                        ${item.variant.priceV2.amount} ${item.variant.priceV2.currencyCode}
+                      </td>
+                    `;
+
+                    document.querySelector('.section-order-status tbody').innerHTML =
+                      document.querySelector('.section-order-status tbody').innerHTML + itemHtml;
+                  });
+
+                  const htmlTotal = `
+                    <td></td>
+                    <td></td>
+                    <td>
+                      Discounts: <br>
+                      ${order.originalTotalPrice.amount - order.currentSubtotalPrice.amount} ${order.currentSubtotalPrice.currencyCode}
+                    </td>
+                    <td>
+                      TOTAL: <br>
+                      ${order.currentSubtotalPrice.amount} ${order.currentSubtotalPrice.currencyCode}
+                    </td>
+                  `;
+
+                  document.querySelector('.section-order-status tfoot').innerHTML = htmlTotal;
+                } else {
+                  document.querySelector('.section-order-status').classList.add('has-no-order');
+                  document.querySelector('.section-order-status').classList.remove('has-order');
+                }
+              });
+          });
+        }
       });
 
     // const Http = new XMLHttpRequest();
@@ -155,3 +327,16 @@ if (getCookie('accessTokenEmail') && getCookie('accessTokenPass')) {
 
   createToken(email, password);
 }
+
+var array_one = ['a', 'b', 'c', 'd'];
+var array_two = ['z', 'x', 'y', 'a', 'c'];
+let matches = 0;
+array_one.forEach(function (item) {
+  var isPresent = array_two.indexOf(item);
+  if (isPresent !== -1) {
+    matches++;
+    console.log(item);
+  }
+});
+
+console.log(matches);
