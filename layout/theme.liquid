@@ -103,6 +103,7 @@
     <link rel="stylesheet"href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'popup.css' | asset_url | stylesheet_tag }}
+    {{ 'product-horizontal.css' | asset_url | stylesheet_tag }}
 
     {%- unless settings.type_body_font.system? -%}
       <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
@@ -155,7 +156,7 @@
         unavailable: `{{ 'products.product.unavailable' | t }}`,
       }
     </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
     <script src="{{ 'my-slider.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'popup.js' | asset_url }}" defer="defer"></script>

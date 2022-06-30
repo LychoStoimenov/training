@@ -1,0 +1,71 @@
+{% if customer %}
+  {% assign list_sku = customer.metafields.custom.bulk_order | replace: ' ', '' %}
+
+  {% assign list = list_sku | replace: ',', '%20OR%20variants.sku:' | prepend: 'variants.sku:' %}
+
+  {% if customer.metafields.custom.enable_bulk_order %}
+    <div class="section-bulk-order">
+      <div class="shell">
+
+        <div class="section__inner">
+          <div class="section__items js-destination">
+
+          </div>
+          <!-- /.section__items -->
+
+          <div class="section__actions" style="text-align: center; margin-top: 30px;">
+            <p>
+              <span class="js-total">0 </span> BGN
+            </p>
+            <button class="js-add-bulk">
+              Add to cart
+            </button>
+          </div>
+          <!-- /.section__actions -->
+        </div>
+        <!-- /.section__inner -->
+      </div>
+      <!-- /.shell -->
+    </div>
+    <!-- /.section-bulk-order -->
+
+    <script type="text/javascript">
+      fetch(`/search?view=sku&type=product&q={{list}}`)
+        .then(res => res.text())
+        .then(data => {
+          const html = new DOMParser().parseFromString(data, 'text/html');
+          console.log(html);
+          const source = html.querySelector('.js-search-results').innerHTML;
+          const destination = document.querySelector('.js-destination');
+
+          destination.innerHTML = source;
+        });
+
+    </script>
+  {% else %}
+    <h2 style="padding: 100px 0; text-align: center;">You don't have access to this page</h2>
+  {% endif %}
+{% else %}
+  <h2 style="padding: 100px 0; text-align: center;">You are not registered</h2>
+{% endif %}
+
+
+{% schema %}
+{
+  "name": "BULK ORDER",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "SAMPLE-TYPE",
+      "name": "SAMPLE-NAME",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
