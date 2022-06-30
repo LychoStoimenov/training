@@ -20,7 +20,7 @@ slidersVideo.forEach((slider) => {
   const dots = slider.querySelector('.swiper-pagination');
 
   const mySwiper = new Swiper(initSlider, {
-    loop: true,
+    // loop: true,
     pagination: {
       el: dots,
       clickable: true,

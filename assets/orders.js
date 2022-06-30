@@ -328,15 +328,15 @@ if (getCookie('accessTokenEmail') && getCookie('accessTokenPass')) {
   createToken(email, password);
 }
 
-var array_one = ['a', 'b', 'c', 'd'];
-var array_two = ['z', 'x', 'y', 'a', 'c'];
-let matches = 0;
-array_one.forEach(function (item) {
-  var isPresent = array_two.indexOf(item);
-  if (isPresent !== -1) {
-    matches++;
-    console.log(item);
-  }
-});
+// var array_one = ['a', 'b', 'c', 'd'];
+// var array_two = ['z', 'x', 'y', 'a', 'c'];
+// let matches = 0;
+// array_one.forEach(function (item) {
+//   var isPresent = array_two.indexOf(item);
+//   if (isPresent !== -1) {
+//     matches++;
+//     console.log(item);
+//   }
+// });
 
-console.log(matches);
+// console.log(matches);
