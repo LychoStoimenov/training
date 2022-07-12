@@ -116,53 +116,56 @@
   </head>
 
   <body>
-    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
-      {{ "accessibility.skip_to_text" | t }}
-    </a>
+    <div class="wrapper">
+      <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+        {{ "accessibility.skip_to_text" | t }}
+      </a>
 
-    {% section 'announcement-bar' %}
+      {% section 'announcement-bar' %}
 
-    {% section 'header' %}
+      {% section 'header' %}
 
-    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
-      {{ content_for_layout }}
-    </main>
+      <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+        {{ content_for_layout }}
+      </main>
 
-    {% section 'footer' %}
+      {% section 'footer' %}
 
-    {% if template contains 'index' %}
-      {%- section 'popup-home' -%}
-    {% endif %}
+      {% if template contains 'index' %}
+        {%- section 'popup-home' -%}
+      {% endif %}
 
-    <ul hidden>
-      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
-    </ul>
+      <ul hidden>
+        <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      </ul>
 
-    <script>
-      window.routes = {
-        cart_add_url: '{{ routes.cart_add_url }}',
-        cart_change_url: '{{ routes.cart_change_url }}',
-        cart_update_url: '{{ routes.cart_update_url }}'
-      };
+      <script>
+        window.routes = {
+          cart_add_url: '{{ routes.cart_add_url }}',
+          cart_change_url: '{{ routes.cart_change_url }}',
+          cart_update_url: '{{ routes.cart_update_url }}'
+        };
 
-      window.cartStrings = {
-        error: `{{ 'sections.cart.cart_error' | t }}`,
-        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t }}`
-      }
+        window.cartStrings = {
+          error: `{{ 'sections.cart.cart_error' | t }}`,
+          quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t }}`
+        }
 
-      window.variantStrings = {
-        addToCart: `{{ 'products.product.add_to_cart' | t }}`,
-        soldOut: `{{ 'products.product.sold_out' | t }}`,
-        unavailable: `{{ 'products.product.unavailable' | t }}`,
-      }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-    <script src="{{ 'my-slider.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'popup.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'cart-ajax.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'orders.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'slider.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'variants.js' | asset_url }}" defer="defer"></script>
+        window.variantStrings = {
+          addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+          soldOut: `{{ 'products.product.sold_out' | t }}`,
+          unavailable: `{{ 'products.product.unavailable' | t }}`,
+        }
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+      <script src="{{ 'my-slider.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'popup.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'cart-ajax.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'orders.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'slider.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'variants.js' | asset_url }}" defer="defer"></script>
+    </div>
+    <!-- /.wrapper -->
   </body>
 </html>
