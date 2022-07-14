@@ -6,6 +6,10 @@
   margin: 0 auto;
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 .wrapper {
   position: relative;
   overflow: hidden;
