@@ -1,180 +1,219 @@
-{{ 'related-products.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'section-related-products.css' | asset_url | stylesheet_tag }}
 
-{%- assign tags = product.tags | join: ' OR tag:' | prepend: 'tag:' -%}
-{%- assign main_tags_array = product.tags | join: ',' -%}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
 
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
 
-<div class="related-products">
-  <div class="shell">
-    <div class="related__header">
-      <h2>Related Products Based on tags</h2>
-    </div>
-    <!-- /.related__header -->
-
-    <div class="related__content">
-      <div class="slider-related-products-tags">
-        <div class="swiper">
-          <div class="swiper-wrapper">
-
-          </div><!-- /.swiper-wrapper -->
-        </div><!-- /.swiper-container -->
-      </div>
-      <!-- /.slider-related-products-tags -->
-    </div>
-    <!-- /.related__content -->
-  </div>
-  <!-- /.shell -->
+<div class="color-{{ section.settings.color_scheme }} gradient no-js-hidden">
+  <product-recommendations
+    class="related-products page-width section-{{ section.id }}-padding isolate"
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}"
+  >
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      <h2 class="related-products__heading {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h2>
+      <ul
+        class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
+        role="list"
+      >
+        {% for recommendation in recommendations.products %}
+          <li class="grid__item">
+            {% render 'card-product',
+              card_product: recommendation,
+              media_aspect_ratio: section.settings.image_ratio,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating
+            %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </product-recommendations>
 </div>
-<!-- /.related-products -->
-
-<script type="text/javascript">
-  const slidersTags = document.querySelectorAll('.slider-related-products-tags');
-  const sliderContainer = document.querySelector('.slider-related-products-tags');
-  const initSlider = sliderContainer.querySelector('.swiper');
-  const destination = sliderContainer.querySelector('.swiper-wrapper');
-
-  fetch(`//${window.location.host}/api/2022-04/graphql.json`, {
-    method: 'POST',
-    headers: {
-      'X-Shopify-Storefront-Access-Token': 'be68f875893107e3d878cf57a0a7abdd',
-      'Content-Type': 'application/graphql',
-    },
-    body: `query {
-      products(first: 100, query: "{{tags}}") {
-        edges {
-          node {
-            handle,
-            title,
-            featuredImage {
-              originalSrc
-            },
-            priceRange {
-              maxVariantPrice {
-                amount,
-                currencyCode
-              },
-              minVariantPrice {
-                amount,
-                currencyCode
-              }
-            },
-            tags,
-          }
-        }
-      }
-    }`
-  }).then(res => {
-    return res.json();
-  }).then(data => {
-    const products = data.data.products.edges;
-
-    const initialArrayLength = '{{main_tags_array}}'.split(',').length;
-
-    products.forEach(product => {
-      const handle = product.node.handle;
-      const title = product.node.title;
-      const imageUrl = product.node.featuredImage.originalSrc;
-      const priceAmount = product.node.priceRange.minVariantPrice.amount;
-      const priceCurrency = product.node.priceRange.minVariantPrice.currencyCode;
-      const productTags = product.node.tags;
-
-      if ('{{product.handle}}' !== handle) {
-        let mainArray = '{{main_tags_array}}'.split(',');
-
-        mainArray = mainArray.filter(val => !productTags.includes(val));
-
-        let order = 0;
-
-        const sameItemsCount = initialArrayLength - mainArray.length;
-
-        if (sameItemsCount >= 3) {
-          order = -2;
-        } else if (sameItemsCount == 2) {
-          order = -1;
-        } else {
-          order = 0;
-        }
-
-        const slideItem = `
-          <div class="swiper-slide" style="order: ${order};">
-            <div class="product-simple">
-              <div class="product__inner">
-                <div class="product__image">
-                  <img src="${imageUrl}" alt="Image">
-                  <a href="/products/${handle}"></a>
-                </div>
-                <div class="product__content">
-                  <h3 class="product__title">
-                    <a href="/products/${handle}">
-                      ${title}
-                    </a>
-                  </h3>
-                  <div class="product__price">
-                    <span>
-                      ${priceAmount} ${priceCurrency}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        destination.innerHTML = destination.innerHTML + slideItem;
-
-      }
-    })
-
-
-    //slider here
-
-    slidersTags.forEach((slider) => {
-      const initSlider = slider.querySelector('.swiper');
-      // const dots = slider.querySelector('.swiper-pagination');
-      const slidesLength = initSlider.querySelectorAll('.swiper-slide').length;
-      const swiperWrapper = initSlider.querySelector('.swiper-wrapper');
-
-
-      let centeredSlides = false;
-      let centeredSlidesBounds = false;
-
-      if (slidesLength > 5) {
-        centeredSlides = false;
-        centeredSlidesBounds = false;
-      }
-
-
-      const mySwiper = new Swiper(initSlider, {
-        loop: false,
-        slidesPerView: 5,
-        spaceBetween: 80,
-        // pagination: {
-        //   el: dots,
-        //   clickable: true,
-        // },
-      });
-
-      if (slidesLength <= 5) {
-        mySwiper.disable();
-        swiperWrapper.style.justifyContent = 'center';
-      }
-
-      if (slidesLength < 5) {
-      }
-    });
-  })
-
-</script>
-
 
 {% schema %}
 {
-  "name": "Related Products - TAGS",
-  "settings": [],
-  "presets": [
+  "name": "t:sections.related-products.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
     {
-      "name": "Related Products - TAGS",
-      "category": "Section"
+      "type": "paragraph",
+      "content": "t:sections.related-products.settings.paragraph__1.content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "You may also like",
+      "label": "t:sections.related-products.settings.heading.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.related-products.settings.products_to_show.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "t:sections.related-products.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.all.colors.has_cards_info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.related-products.settings.header__2.content"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.related-products.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.related-products.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.related-products.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.related-products.settings.image_ratio.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "t:sections.related-products.settings.show_secondary_image.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "t:sections.related-products.settings.show_vendor.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "t:sections.related-products.settings.show_rating.label",
+      "info": "t:sections.related-products.settings.show_rating.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.related-products.settings.header_mobile.content"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "t:sections.related-products.settings.columns_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.related-products.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.related-products.settings.columns_mobile.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
     }
   ]
 }
