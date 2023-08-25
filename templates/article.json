@@ -6,20 +6,18 @@
         "featured_image": {
           "type": "featured_image",
           "settings": {
+            "image_height": "adapt"
           }
         },
         "title": {
           "type": "title",
           "settings": {
+            "blog_show_date": true,
+            "blog_show_author": true
           }
         },
         "content": {
           "type": "content",
-          "settings": {
-          }
-        },
-        "social_sharing": {
-          "type": "social_sharing",
           "settings": {
           }
         }
@@ -27,8 +25,7 @@
       "block_order": [
         "featured_image",
         "title",
-        "content",
-        "social_sharing"
+        "content"
       ],
       "settings": {
       }
