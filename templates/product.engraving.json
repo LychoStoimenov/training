@@ -1,9 +1,0 @@
-{
-  "sections": {
-    "main": {
-      "type": "product-engraving",
-      "settings": {}
-    }
-  },
-  "order": ["main"]
-}

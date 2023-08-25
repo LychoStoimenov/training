@@ -1,9 +1,0 @@
-{
-  "sections": {
-    "main": {
-      "type": "section-dynamic-plp",
-      "settings": {}
-    }
-  },
-  "order": ["main"]
-}

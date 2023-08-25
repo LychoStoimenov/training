@@ -1,9 +1,0 @@
-{
-  "sections": {
-    "main": {
-      "type": "section-bulk-order",
-      "settings": {}
-    }
-  },
-  "order": ["main"]
-}
